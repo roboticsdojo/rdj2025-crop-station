@@ -25,7 +25,9 @@ class ImageDisplayNode(Node):
         pygame.display.set_caption('Image Display')
         self.clock = pygame.time.Clock()
         self.current_image = None
-        self.running = True
+    self.running = True
+    # Timer to update pygame display at 30Hz
+    self.timer = self.create_timer(1.0/30.0, self.update_display)
 
     def show_callback(self, msg):
         filename = msg.data
@@ -33,9 +35,6 @@ class ImageDisplayNode(Node):
         if os.path.isfile(image_path):
             try:
                 self.current_image = pygame.image.load(image_path)
-                self.screen.fill((128, 128, 128))
-                self.screen.blit(self.current_image, (0, 0))
-                pygame.display.flip()
                 self.get_logger().info(f"Displayed image: {filename}")
             except Exception as e:
                 self.get_logger().error(f"Failed to load image {filename}: {e}")
@@ -44,29 +43,32 @@ class ImageDisplayNode(Node):
 
     def not_show_callback(self, msg):
         if msg.data:
-            self.screen.fill((0, 0, 0))
-            pygame.display.flip()
             self.current_image = None
             self.get_logger().info("Display cleared.")
 
-    def spin(self):
-        while rclpy.ok() and self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-            self.clock.tick(10)
-
-        pygame.quit()
+    def update_display(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+                rclpy.shutdown()
+        if self.current_image:
+            self.screen.fill((128, 128, 128))
+            self.screen.blit(self.current_image, (0, 0))
+        else:
+            self.screen.fill((0, 0, 0))
+        pygame.display.flip()
+        self.clock.tick(30)
 
 
 def main(args=None):
     rclpy.init(args=args)
     node = ImageDisplayNode()
     try:
-        node.spin()
+        rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     node.destroy_node()
+    pygame.quit()
     rclpy.shutdown()
 
 if __name__ == '__main__':

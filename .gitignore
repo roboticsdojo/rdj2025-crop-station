@@ -1,3 +1,4 @@
-logs/
+log/
 build/
 install/
+.vscode/

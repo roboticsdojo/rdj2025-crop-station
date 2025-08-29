@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'image_display_node = crop_station.image_display_node:main',
         ],
     },
 )

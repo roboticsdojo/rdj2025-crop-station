@@ -33,7 +33,7 @@ class ImageDisplayNode(Node):
         if os.path.isfile(image_path):
             try:
                 self.current_image = pygame.image.load(image_path)
-                self.screen.fill((0, 0, 0))
+                self.screen.fill((128, 128, 128))
                 self.screen.blit(self.current_image, (0, 0))
                 pygame.display.flip()
                 self.get_logger().info(f"Displayed image: {filename}")

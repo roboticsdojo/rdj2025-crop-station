@@ -23,10 +23,10 @@ class ImageDisplayNode(Node):
             10
         )
         self.current_image = None
-    self.window_name = 'Image Display'
-    self.resolution = (1280, 720)
-    cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)
-    cv2.setWindowProperty(self.window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        self.window_name = 'Image Display'
+        self.resolution = (1280, 720)
+        cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)
+        cv2.setWindowProperty(self.window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
         self.running = True
         # Timer to update OpenCV display at 30Hz
         self.timer = self.create_timer(1.0/30.0, self.update_display)

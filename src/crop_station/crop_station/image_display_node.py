@@ -52,7 +52,13 @@ class ImageDisplayNode(Node):
         # Running flag (set to False when ESC is pressed)
         self.running = True
 
-        # Timer to update the OpenCV display at ~30Hz (refresh rate)
+        # Show orange image to set window size and fullscreen immediately
+        orange_bgr = (16, 117, 242)  # OpenCV uses BGR, so #f27510ff -> (16,117,242)
+        blank = np.full((self.resolution[1], self.resolution[0], 3), orange_bgr, dtype=np.uint8)
+        cv2.imshow(self.window_name, blank)
+        cv2.waitKey(1)
+
+        # Timer to update OpenCV display at 30Hz (refresh rate)
         self.timer = self.create_timer(1.0 / 30.0, self.update_display)
 
     def show_callback(self, msg):
@@ -102,11 +108,12 @@ class ImageDisplayNode(Node):
             image_resized = cv2.resize(self.current_image, self.resolution, interpolation=cv2.INTER_AREA)
             cv2.imshow(self.window_name, image_resized)
         else:
-            # Display a blank (black) screen when no image is set
-            blank = 255 * np.zeros((self.resolution[1], self.resolution[0], 3), dtype=np.uint8)
+            # Show orange image if no image is set
+            orange_bgr = (16, 117, 242)  # OpenCV uses BGR, so #f27510ff -> (16,117,242)
+            blank = np.full((self.resolution[1], self.resolution[0], 3), orange_bgr, dtype=np.uint8)
             cv2.imshow(self.window_name, blank)
 
-        # Handle keyboard events
+        # Handle window events
         key = cv2.waitKey(1)
         if key == 27:  # ESC key pressed
             self.running = False

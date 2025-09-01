@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String, Bool
+import numpy as np
 import cv2
 import os
 
@@ -22,7 +23,10 @@ class ImageDisplayNode(Node):
             10
         )
         self.current_image = None
-        self.window_name = 'Image Display'
+    self.window_name = 'Image Display'
+    self.resolution = (1280, 720)
+    cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty(self.window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
         self.running = True
         # Timer to update OpenCV display at 30Hz
         self.timer = self.create_timer(1.0/30.0, self.update_display)
@@ -51,10 +55,10 @@ class ImageDisplayNode(Node):
 
     def update_display(self):
         if self.current_image is not None:
-            cv2.imshow(self.window_name, self.current_image)
+            image_resized = cv2.resize(self.current_image, self.resolution, interpolation=cv2.INTER_AREA)
+            cv2.imshow(self.window_name, image_resized)
         else:
-            # Show a blank image (black)
-            blank = 255 * np.zeros((600, 800, 3), dtype=np.uint8)
+            blank = 255 * np.zeros((self.resolution[1], self.resolution[0], 3), dtype=np.uint8)
             cv2.imshow(self.window_name, blank)
         # Handle window events
         key = cv2.waitKey(1)
@@ -62,8 +66,6 @@ class ImageDisplayNode(Node):
             self.running = False
             rclpy.shutdown()
 
-
-import numpy as np
 
 def main(args=None):
     rclpy.init(args=args)

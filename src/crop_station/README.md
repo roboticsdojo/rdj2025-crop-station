@@ -35,7 +35,7 @@ The display window will:
 -   If `a.png` exists in:
     
     ```
-    ~/ros2_display_ws/src/crop_station/images/a.png
+    ~/rdj2025-crop-station/src/crop_station/images/a.png
     ```
     
     it will be displayed fullscreen.

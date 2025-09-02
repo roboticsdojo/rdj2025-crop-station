@@ -93,7 +93,6 @@ class ImageDisplayNode(Node):
         """
         if msg.data:
             self.current_image = None
-            cv2.destroyWindow(self.window_name)
             self.get_logger().info("Display cleared.")
 
     def update_display(self):

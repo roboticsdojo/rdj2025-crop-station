@@ -43,7 +43,7 @@ class ImageDisplayNode(Node):
         self.window_name = 'Image Display'
 
         # Target screen resolution (we'll adjust this to our Raspberry Pi HDMI screen size)
-        self.resolution = (1280, 720)
+        self.resolution = (800, 480)
 
         # Create a fullscreen window using OpenCV
         cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)

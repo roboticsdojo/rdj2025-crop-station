@@ -27,10 +27,10 @@ class ImageDisplayNode(Node):
             10
         )
 
-        # Subscription to /not_show topic (expects Bool message) -> true/false
+        # Subscription to /not_show topic (expects String message) -> true/false
         # If True, the display will be cleared
         self.sub_not_show = self.create_subscription(
-            Bool,
+            String,
             '/not_show',
             self.not_show_callback,
             10
@@ -91,7 +91,7 @@ class ImageDisplayNode(Node):
         Callback for /not_show topic.
         Clears the display when True is received.
         """
-        if msg.data:
+        if str(msg.data).lower() == 'true':
             self.current_image = None
             self.get_logger().info("Display cleared.")
 

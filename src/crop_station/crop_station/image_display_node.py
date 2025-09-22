@@ -67,7 +67,12 @@ class ImageDisplayNode(Node):
         Loads and displays an image when a filename is received.
         """
         filename = msg.data
-        image_path = os.path.join(self.images_dir, filename)
+
+
+        # Check what image to load (late / early / healthy)
+        image_type = filename.split('_')[0] if '_' in filename else 'Unknown image type. Please use late/early/healthy as prefix'
+
+        image_path = os.path.join(self.images_dir, image_type, filename)
 
         if os.path.isfile(image_path):
             try:

@@ -27,10 +27,10 @@ class ImageDisplayNode(Node):
             10
         )
 
-        # Subscription to /not_show topic (expects Bool message) -> true/false
+        # Subscription to /not_show topic (expects String message) -> true/false
         # If True, the display will be cleared
         self.sub_not_show = self.create_subscription(
-            Bool,
+            String,
             '/not_show',
             self.not_show_callback,
             10
@@ -43,7 +43,7 @@ class ImageDisplayNode(Node):
         self.window_name = 'Image Display'
 
         # Target screen resolution (we'll adjust this to our Raspberry Pi HDMI screen size)
-        self.resolution = (1280, 720)
+        self.resolution = (800, 480)
 
         # Create a fullscreen window using OpenCV
         cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)
@@ -67,7 +67,12 @@ class ImageDisplayNode(Node):
         Loads and displays an image when a filename is received.
         """
         filename = msg.data
-        image_path = os.path.join(self.images_dir, filename)
+
+
+        # Check what image to load (late / early / healthy)
+        image_type = filename.split('_')[0] if '_' in filename else 'Unknown image type. Please use late/early/healthy as prefix'
+
+        image_path = os.path.join(self.images_dir, image_type, filename)
 
         if os.path.isfile(image_path):
             try:
@@ -91,7 +96,7 @@ class ImageDisplayNode(Node):
         Callback for /not_show topic.
         Clears the display when True is received.
         """
-        if msg.data:
+        if str(msg.data).lower() == 'true':
             self.current_image = None
             self.get_logger().info("Display cleared.")
 

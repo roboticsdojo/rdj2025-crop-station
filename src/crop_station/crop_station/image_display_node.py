@@ -17,7 +17,7 @@ class ImageDisplayNode(Node):
         super().__init__('image_display_node')
 
         # Directory where images are stored (relative path didn't work)
-        self.images_dir = "/home/rdj2025-crop-station/src/crop_station/images/"
+        self.images_dir = "/home/screen/Desktop/rdj2025-crop-station/src/crop_station/images/"
 
         # Subscription to /show topic (expects filename as String) -> a.png
         self.sub_show = self.create_subscription(

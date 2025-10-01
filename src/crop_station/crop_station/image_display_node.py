@@ -43,7 +43,7 @@ class ImageDisplayNode(Node):
         self.window_name = 'Image Display'
 
         # Target screen resolution (we'll adjust this to our Raspberry Pi HDMI screen size)
-        self.resolution = (800, 480)
+        self.resolution = (256, 256)
 
         # Create a fullscreen window using OpenCV
         cv2.namedWindow(self.window_name, cv2.WND_PROP_FULLSCREEN)
@@ -72,7 +72,8 @@ class ImageDisplayNode(Node):
         # Check what image to load (late / early / healthy)
         image_type = filename.split('_')[0] if '_' in filename else 'Unknown image type. Please use late/early/healthy as prefix'
 
-        image_path = os.path.join(self.images_dir, image_type, filename)
+        image_name_actual=filename.split('_')[-1]
+        image_path = os.path.join(self.images_dir, image_type, image_name_actual)
 
         if os.path.isfile(image_path):
             try:
